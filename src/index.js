@@ -1,7 +1,3 @@
-import { attr } from './utilities';
-import { hoverActive } from './interactions/hoverActive';
-import { scrollIn } from './interactions/scrollIn';
-
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
   console.log('Local Script Loaded');
@@ -15,7 +11,18 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   //////////////////////////////
-  //Global Variables
+  //Utility Functions
+  const attr = function (defaultVal, attrVal) {
+    const defaultValType = typeof defaultVal;
+    if (typeof attrVal !== 'string' || attrVal.trim() === '') return defaultVal;
+    if (attrVal === 'true' && defaultValType === 'boolean') return true;
+    if (attrVal === 'false' && defaultValType === 'boolean') return false;
+    if (isNaN(attrVal) && defaultValType === 'string') return attrVal;
+    if (!isNaN(attrVal) && defaultValType === 'number') return +attrVal;
+    return defaultVal;
+  };
+
+  const scrolling = function () {};
 
   //////////////////////////////
   //Control Functions on page load
@@ -31,11 +38,9 @@ document.addEventListener('DOMContentLoaded', function () {
       },
       (gsapContext) => {
         let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
-        //functional interactions
-        hoverActive(gsapContext);
         //conditional interactions
-        if (!reduceMotion) {
-          scrollIn(gsapContext);
+        if (!isDesktop) {
+          scrolling();
         }
       }
     );
